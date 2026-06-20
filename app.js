@@ -8,7 +8,7 @@
 // API CONFIG — RailKit via local proxy server
 // =====================================================
 const origin = window.location.origin || '';
-const API_BASE = (origin.startsWith('file://') || origin === 'null' || !origin.includes('3000'))
+const API_BASE = (origin.startsWith('file://') || origin === 'null')
   ? 'http://localhost:3000'
   : origin;
 

@@ -24,8 +24,8 @@ configure('irctc_9e427ab26f99aec8c0ade68a833c3101bfdb43dde123ff9b');
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from /Applications/Appnow
-app.use(express.static(__dirname));
+// Serve static files from parent directory where assets and frontend files reside
+app.use(express.static(path.join(__dirname, '..')));
 
 // ──────────────────────────────────────────────
 // API Routes
@@ -110,7 +110,7 @@ app.get('/api/live-station/:stnCode', async (req, res) => {
 // Fallback — serve index.html for SPA routing
 // ──────────────────────────────────────────────
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 // ──────────────────────────────────────────────
