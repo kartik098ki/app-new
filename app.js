@@ -1,6 +1,6 @@
 /* =====================================================
    RAILQUICK — Complete Application JavaScript
-   API Integration · Cart · Checkout · Premium UX
+   Blinkit Green Theme · PNR & Live Tracking · Mock Fallbacks
    ===================================================== */
 
 'use strict';
@@ -26,6 +26,81 @@ let appState = {
   searchQuery: '',
   appliedCoupon: null
 };
+
+// ===== MOCK DATA GENERATORS =====
+function getMockPNRData(pnr) {
+  const pnrStr = String(pnr);
+  const oddPnr = parseInt(pnrStr.charAt(pnrStr.length - 1)) % 2 !== 0;
+  
+  const trainNo = oddPnr ? '12301' : '12424';
+  const trainName = oddPnr ? 'Rajdhani Express' : 'Vande Bharat Express';
+  const dateStr = new Date().toLocaleDateString('en-IN');
+  const coach = oddPnr ? 'B2' : 'C4';
+  const seat = oddPnr ? '45' : '18';
+  const berth = oddPnr ? 'UB' : 'WS'; // Upper Berth vs Window Seat
+
+  return {
+    pnrNumber: pnrStr,
+    trainNumber: trainNo,
+    trainName: trainName,
+    dateOfJourney: dateStr,
+    source: 'New Delhi (NDLS)',
+    destination: oddPnr ? 'Howrah Junction (HWH)' : 'Dibrugarh (DBRG)',
+    reservationClass: oddPnr ? 'AC 3 Tier (3A)' : 'AC Chair Car (CC)',
+    chartPrepared: 'Prepared',
+    fare: oddPnr ? 1640 : 1250,
+    passengerList: [
+      {
+        serialNumber: 'Passenger 1',
+        bookingStatus: `CNF / ${coach} / ${seat} / ${berth}`,
+        currentStatus: `CNF / ${coach} / ${seat} / ${berth}`,
+        coach: coach,
+        berth: seat,
+        berthCode: berth
+      }
+    ]
+  };
+}
+
+function getMockLiveStatus(trainNo) {
+  const now = new Date();
+  const updateTime = 'Just now';
+  
+  return {
+    trainNo: trainNo || '12301',
+    trainName: trainNo === '12301' ? 'Rajdhani Express' : 'Express Special',
+    lastUpdate: updateTime,
+    statusNote: 'Running 12 mins late',
+    currentStationCode: 'UMB',
+    timeline: [
+      { stationName: 'New Delhi', stationCode: 'NDLS', type: 'stoppage', status: 'passed', arrival: { actual: '06:00', scheduled: '06:00' }, departure: { actual: '06:10', scheduled: '06:10' }, platform: '1' },
+      { stationName: 'Panipat Junction', stationCode: 'PNP', type: 'stoppage', status: 'passed', arrival: { actual: '07:22', scheduled: '07:15' }, departure: { actual: '07:24', scheduled: '07:17' }, platform: '3' },
+      { stationName: 'Ambala Cantt Junction', stationCode: 'UMB', type: 'stoppage', status: 'current', arrival: { actual: '08:45', scheduled: '08:33' }, departure: { actual: '08:50', scheduled: '08:38' }, platform: '2' },
+      { stationName: 'Ludhiana Junction', stationCode: 'LDH', type: 'stoppage', status: 'upcoming', arrival: { scheduled: '10:15' }, departure: { scheduled: '10:25' }, platform: '1' },
+      { stationName: 'Jalandhar Cantt', stationCode: 'JRC', type: 'stoppage', status: 'upcoming', arrival: { scheduled: '11:15' }, departure: { scheduled: '11:17' }, platform: '2' },
+      { stationName: 'Jammu Tawi', stationCode: 'JAT', type: 'stoppage', status: 'upcoming', arrival: { scheduled: '13:45' }, departure: { scheduled: '13:55' }, platform: '3' }
+    ]
+  };
+}
+
+function getMockTrainSchedule(query) {
+  return {
+    trainInfo: {
+      train_name: 'New Delhi Express',
+      train_no: query || '12002',
+      from_stn_name: 'NDLS',
+      to_stn_name: 'KLK',
+      travel_time: '4h 15m'
+    },
+    route: [
+      { stationName: 'New Delhi', stationCode: 'NDLS', stnName: 'New Delhi', stnCode: 'NDLS', arrival: 'Source', departure: '07:40' },
+      { stationName: 'Panipat Junction', stationCode: 'PNP', stnName: 'Panipat Jn', stnCode: 'PNP', arrival: '08:50', departure: '08:52' },
+      { stationName: 'Ambala Cantt', stationCode: 'UMB', stnName: 'Ambala Cantt', stnCode: 'UMB', arrival: '10:05', departure: '10:07' },
+      { stationName: 'Chandigarh', stationCode: 'CDG', stnName: 'Chandigarh', stnCode: 'CDG', arrival: '11:00', departure: '11:05' },
+      { stationName: 'Kalka', stationCode: 'KLK', stnName: 'Kalka', stnCode: 'KLK', arrival: '11:55', departure: 'Destination' }
+    ]
+  };
+}
 
 function loadState() {
   try {
@@ -58,7 +133,7 @@ const PRODUCTS = [
   { id: 3, name: 'Ambrane 10000mAh Power Bank', price: 499, mrp: 799, category: 'electronics', img: 'product_powerbank.png', rating: 4.6, reviews: 543, description: 'Never run out of charge. Dual USB output, fast charge support. Compact and light for journeys.', tags: ['Fast Charge', 'Dual USB', '10000mAh'] },
   { id: 4, name: 'Travel Hygiene Kit', price: 35, mrp: 50, category: 'hygiene', img: 'product_toothbrush.png', rating: 4.5, reviews: 337, description: 'Complete travel kit with toothbrush, mini toothpaste, face towel & soap. Everything for a fresh journey.', tags: ['Complete Kit', 'Travel Size', 'Colgate+Dove'] },
   { id: 5, name: 'Dettol Hand Sanitizer 50ml', price: 45, mrp: 60, category: 'hygiene', img: 'product_sanitizer.png', rating: 4.8, reviews: 2145, description: 'Kill 99.9% of germs. No water required. Compact travel size fits in your pocket easily.', tags: ['Kills 99.9% Germs', 'Travel Size', 'Instant'] },
-  { id: 6, name: 'Wagh Bakri Instant Chai Kit', price: 40, mrp: 55, category: 'beverages', img: 'product_tea.png', rating: 4.4, reviews: 451, description: 'Authentic masala chai anywhere on your journey. 10 cups pack with sugar & spices. Just add hot water!', tags: ['Masala Chai', '10 Cups', 'Instant'] },
+  { id: 6, name: 'Wagh Bakri Instant Chai Kit', price: 40, mrp: 55, category: 'beverages', img: 'product_tea.png', rating: 4.4, reviews: 451, description: 'Masala chai anywhere on your journey. 10 cups pack with sugar & spices. Just add hot water!', tags: ['Masala Chai', '10 Cups', 'Instant'] },
   { id: 7, name: 'Inflatable Travel Neck Pillow', price: 149, mrp: 249, category: 'comfort', img: 'product_neckpillow.png', rating: 4.3, reviews: 788, description: 'Sleep comfortably on long overnight journeys. Soft velvet cover, portable inflatable design.', tags: ['Velvet Cover', 'Inflatable', 'Ergonomic'] },
   { id: 8, name: 'boAt Wired Earphones', price: 199, mrp: 399, category: 'electronics', img: 'product_earphones.png', rating: 4.5, reviews: 1120, description: 'Premium audio quality with mic. Great for music, calls & videos during train journey. 3.5mm jack.', tags: ['With Mic', '3.5mm Jack', 'Premium Sound'] }
 ];
@@ -82,7 +157,7 @@ function navigateTo(pageId) {
     bottomNav.style.display = hideNavPages.includes(pageId) ? 'none' : 'flex';
   }
 
-  const navMap = { 'page-shop': 'home', 'page-orders': 'orders', 'page-offers': 'offers', 'page-account': 'account' };
+  const navMap = { 'page-shop': 'home', 'page-orders': 'orders', 'page-account': 'account' };
   const navName = navMap[pageId];
   if (navName) activateNav(navName);
 
@@ -99,7 +174,7 @@ function activateNav(name) {
   if (btn) btn.classList.add('active');
 }
 
-// ===== PNR PAGE =====
+// ===== PNR & LIVE STATUS PAGE =====
 function switchPNRTab(tab) {
   document.getElementById('panel-pnr').classList.toggle('hidden', tab !== 'pnr');
   document.getElementById('panel-live').classList.toggle('hidden', tab !== 'live');
@@ -118,6 +193,7 @@ function validateApiResponse(data) {
   return payload;
 }
 
+// Check PNR Status with Mock fallback
 async function checkPNRStatus() {
   const pnr = document.getElementById('pnr-input').value.trim();
   if (pnr.length !== 10) { showToast('Please enter a valid 10-digit PNR', 'warning'); return; }
@@ -152,10 +228,17 @@ async function checkPNRStatus() {
     saveState();
     renderPNRResult(mapped);
     showContinueBar(mapped);
-    showToast('PNR details fetched successfully!');
+    showToast('PNR details loaded!');
   } catch (err) {
+    // API Failed -> Fallback to realistic Mock Data
+    console.warn('API error, falling back to mock data:', err.message);
+    const mock = getMockPNRData(pnr);
+    appState.pnrData = mock;
+    saveState();
+    renderPNRResult(mock);
+    showContinueBar(mock);
     hideLoading();
-    showToast(err.message || 'Could not fetch PNR.', 'warning');
+    showToast('Mock PNR loaded (API offline)', 'info');
   }
 }
 
@@ -163,7 +246,7 @@ function renderPNRResult(d) {
   const paxHTML = (d.passengerList || []).map(p => `
     <div class="passenger-chip"><strong>${p.serialNumber}</strong>: ${p.currentStatus}</div>
   `).join('');
-  const chartColor = (d.chartPrepared || '').toLowerCase().includes('prepared') ? 'green' : 'orange';
+  const chartColor = (d.chartPrepared || '').toLowerCase().includes('prepared') ? 'green' : 'red';
 
   document.getElementById('pnr-results').innerHTML = `
     <div class="result-header">
@@ -173,10 +256,11 @@ function renderPNRResult(d) {
     <div class="result-body">
       <div class="result-row"><span class="result-label">PNR Number</span><span class="result-value">${d.pnrNumber}</span></div>
       <div class="result-row"><span class="result-label">Journey Date</span><span class="result-value">${d.dateOfJourney || '—'}</span></div>
-      <div class="result-row"><span class="result-label">From → To</span><span class="result-value" style="font-size:0.78rem">${d.source} → ${d.destination}</span></div>
+      <div class="result-row"><span class="result-label">Route</span><span class="result-value" style="font-size:0.75rem">${d.source} → ${d.destination}</span></div>
       <div class="result-row"><span class="result-label">Class</span><span class="result-value">${d.reservationClass || '—'}</span></div>
       <div class="result-row"><span class="result-label">Chart Status</span><span class="result-value ${chartColor}">${d.chartPrepared || '—'}</span></div>
       ${d.fare ? `<div class="result-row"><span class="result-label">Fare</span><span class="result-value">₹${d.fare}</span></div>` : ''}
+      <div style="margin-top:10px; font-weight:600; font-size:0.8rem; color:var(--text-light)">PASSENGERS SEATS</div>
       ${paxHTML}
     </div>`;
   document.getElementById('pnr-results').classList.remove('hidden');
@@ -186,13 +270,14 @@ function showContinueBar(data) {
   const bar = document.getElementById('continue-bar');
   const info = document.getElementById('train-info-mini');
   const pax = data.passengerList && data.passengerList[0];
-  const seat = pax ? pax.currentStatus : data.reservationClass || '—';
-  info.innerHTML = `<strong>${data.trainName || 'Train'}</strong><br/><span style="color:var(--orange)">Seat: ${seat}</span>`;
+  const seat = pax ? `${pax.coach}, Seat ${pax.berth}` : data.reservationClass || '—';
+  info.innerHTML = `<strong>${data.trainName || 'Train'}</strong><br/><span style="color:var(--green)">Delivery to: ${seat}</span>`;
   bar.classList.remove('hidden');
 }
 
 function proceedToShop() { navigateTo('page-shop'); }
 
+// Get Live Train Status with Mock fallback
 async function checkLiveStatus() {
   const trainNo = document.getElementById('live-train-input').value.trim();
   const dateInput = document.getElementById('live-date-input').value;
@@ -216,11 +301,16 @@ async function checkLiveStatus() {
     renderLiveTrainResult(d, trainNo);
     showToast('Live status fetched!');
   } catch(err) {
+    // API Failed -> Fallback to detailed Mock Timeline
+    console.warn('API error, falling back to mock train status:', err.message);
+    const mock = getMockLiveStatus(trainNo);
+    renderLiveTrainResult(mock, trainNo);
     hideLoading();
-    showToast(err.message || 'Could not fetch live status.', 'warning');
+    showToast('Mock status loaded (API offline)', 'info');
   }
 }
 
+// Render vertical premium timeline route visualization
 function renderLiveTrainResult(d, trainNo) {
   let currentStation = '—', nextStation = '—';
   if (d.timeline && d.timeline.length > 0) {
@@ -232,81 +322,135 @@ function renderLiveTrainResult(d, trainNo) {
       const idx = d.timeline.indexOf(current);
       if (idx < d.timeline.length - 1) { const up = d.timeline.slice(idx + 1).find(t => t.status === 'upcoming'); if (up) nextStation = `${up.stationName || up.stationCode} (${up.stationCode})`; }
     }
-    if (nextStation === '—') { const up = d.timeline.find(t => t.status === 'upcoming'); if (up) nextStation = `${up.stationName || up.stationCode} (${up.stationCode})`; }
   }
 
   const statusNote = d.statusNote || 'Running';
   const isDelayed = statusNote.toLowerCase().includes('late') || statusNote.toLowerCase().includes('delay');
+  
   let timelineHTML = '';
   if (d.timeline && d.timeline.length > 0) {
-    const stops = d.timeline.filter(t => t.type === 'stoppage').slice(0, 6);
-    timelineHTML = stops.map(s => {
-      const sc = s.status === 'passed' ? 'green' : (s.status === 'current' ? 'orange' : '');
-      const dep = s.departure?.actual || s.departure?.scheduled || '—';
-      const arr = s.arrival?.actual || s.arrival?.scheduled || '—';
-      return `<div class="result-row"><span class="result-label">${s.stationName} (${s.stationCode})</span><span class="result-value ${sc}" style="font-size:0.75rem">${arr} / ${dep}</span></div>`;
+    timelineHTML = d.timeline.map(s => {
+      const nodeClass = s.status === 'passed' ? 'passed' : (s.status === 'current' ? 'current' : 'upcoming');
+      const isLateNode = isDelayed && nodeClass === 'current';
+      
+      const timeArr = s.arrival?.actual || s.arrival?.scheduled || '—';
+      const timeSch = s.arrival?.scheduled || '';
+      
+      return `
+        <div class="timeline-node ${nodeClass}">
+          <div class="node-dot"></div>
+          <div class="node-content">
+            <div class="node-details">
+              <span class="node-station">${s.stationName} (${s.stationCode})</span>
+              <span class="node-platform">Platform ${s.platform || '—'}</span>
+              ${nodeClass === 'current' ? `<span class="delay-tag ${isDelayed ? 'late' : 'ontime'}">${statusNote}</span>` : ''}
+            </div>
+            <div class="node-times">
+              <div class="time-actual">${timeArr}</div>
+              ${timeSch && timeSch !== timeArr ? `<div class="time-sched">${timeSch}</div>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
     }).join('');
   }
 
   document.getElementById('pnr-results').innerHTML = `
-    <div class="result-header" style="background:linear-gradient(135deg,#1E3A5F,#2a5298)">
+    <div class="result-header" style="background:linear-gradient(135deg,#0C831F,#055913)">
       <div class="result-train-name">${d.trainName || 'Train ' + trainNo}</div>
       <div class="result-train-num">Updated: ${d.lastUpdate || 'Just now'}</div>
     </div>
-    <div class="result-body">
+    <div class="result-body" style="padding-top:20px;">
       <div class="result-row"><span class="result-label">Train Number</span><span class="result-value">#${d.trainNo || trainNo}</span></div>
-      <div class="result-row"><span class="result-label">Status</span><span class="result-value ${isDelayed ? 'orange' : 'green'}">${statusNote}</span></div>
-      ${currentStation !== '—' ? `<div class="result-row"><span class="result-label">Current Station</span><span class="result-value">${currentStation}</span></div>` : ''}
-      ${nextStation !== '—' ? `<div class="result-row"><span class="result-label">Next Station</span><span class="result-value orange">${nextStation}</span></div>` : ''}
-      ${timelineHTML ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><div style="font-size:0.72rem;font-weight:700;color:var(--text-light);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">STATION TIMELINE</div>${timelineHTML}</div>` : ''}
+      <div class="result-row"><span class="result-label">Status</span><span class="result-value" style="color:var(--green);font-weight:700;">${statusNote}</span></div>
+      
+      <div style="margin-top:20px; font-weight:800; font-size:0.75rem; color:var(--text-light); text-transform:uppercase; letter-spacing:0.5px;">ROUTE TIMELINE</div>
+      <div class="train-timeline">
+        ${timelineHTML}
+      </div>
     </div>`;
   document.getElementById('pnr-results').classList.remove('hidden');
 }
 
+// Search Train Route
 async function searchTrain() {
   const query = document.getElementById('train-search-input').value.trim();
   if (!query) { showToast('Enter train number or name', 'warning'); return; }
-  showLoading('Searching train...');
+  showLoading('Searching train route...');
   try {
     const resp = await fetch(`${API_BASE}/api/train-info/${query}`);
     const data = await resp.json();
     hideLoading();
     const d = validateApiResponse(data);
     renderTrainSchedule(d);
-    showToast('Train info fetched!');
+    showToast('Train route loaded!');
   } catch (err) {
+    // API Failed -> Fallback to mock schedule
+    console.warn('API error, falling back to mock schedule:', err.message);
+    const mock = getMockTrainSchedule(query);
+    renderTrainSchedule(mock);
     hideLoading();
-    showToast(err.message || 'Could not find train.', 'warning');
+    showToast('Mock route loaded (API offline)', 'info');
   }
 }
 
 function renderTrainSchedule(d) {
   const info = d.trainInfo || {};
-  const stations = (d.route || []).slice(0, 8);
+  const stations = d.route || [];
   const stationsHTML = stations.map(s => `
-    <div class="result-row"><span class="result-label">${s.stnName || s.stationName} (${s.stnCode || s.stationCode || ''})</span><span class="result-value" style="font-size:0.78rem">${s.arrival || '—'} / ${s.departure || '—'}</span></div>
+    <div class="result-row">
+      <span class="result-label">${s.stnName || s.stationName} (${s.stnCode || s.stationCode || ''})</span>
+      <span class="result-value" style="font-size:0.78rem">${s.arrival || 'Source'} / ${s.departure || 'Destination'}</span>
+    </div>
   `).join('');
+
   document.getElementById('pnr-results').innerHTML = `
-    <div class="result-header"><div class="result-train-name">${info.train_name || 'Train'} (${info.train_no || ''})</div><div class="result-train-num">${info.from_stn_name || ''} → ${info.to_stn_name || ''} · ${info.travel_time || ''}</div></div>
+    <div class="result-header">
+      <div class="result-train-name">${info.train_name || 'Train'} (${info.train_no || ''})</div>
+      <div class="result-train-num">${info.from_stn_name || ''} → ${info.to_stn_name || ''} · Travel Time: ${info.travel_time || '—'}</div>
+    </div>
     <div class="result-body">
-      <div class="result-row" style="background:#FFF3ED;border-radius:8px;padding:8px 12px;margin-bottom:4px;"><span class="result-label" style="font-size:0.7rem;font-weight:700">STATION</span><span class="result-label" style="font-size:0.7rem;font-weight:700">ARR / DEP</span></div>
+      <div class="result-row" style="background:var(--green-light);border-radius:8px;padding:8px 12px;margin-bottom:8px;">
+        <span class="result-label" style="font-size:0.7rem;font-weight:700;color:var(--green-dark);">STATION</span>
+        <span class="result-label" style="font-size:0.7rem;font-weight:700;color:var(--green-dark);">ARR / DEP</span>
+      </div>
       ${stationsHTML}
     </div>`;
   document.getElementById('pnr-results').classList.remove('hidden');
 }
 
 // ===== SHOP PAGE =====
-function initShopPage() { renderProducts(PRODUCTS); updateTrainStrip(); updateCartFAB(); }
+function initShopPage() {
+  renderProducts(PRODUCTS);
+  updateShopTopbar();
+  updateCartFAB();
+}
 
-function updateTrainStrip() {
+// Dynamic header showing train name or default Delivery station
+function updateShopTopbar() {
+  const labelEl = document.getElementById('shop-delivering-label');
+  const headerEl = document.getElementById('shop-delivery-header');
   const strip = document.getElementById('train-strip');
+
   if (appState.pnrData) {
     const d = appState.pnrData;
-    const seat = d.passengerList && d.passengerList[0] ? d.passengerList[0].currentStatus : d.reservationClass || '—';
-    document.getElementById('strip-train-name').textContent = `${d.trainName || 'Train'} #${d.trainNumber || ''}`;
-    document.getElementById('strip-seat').textContent = `Seat: ${seat}`;
+    const pax = d.passengerList && d.passengerList[0];
+    const coach = pax ? pax.coach : '—';
+    const seat = pax ? pax.berth : '—';
+    const berth = pax ? pax.berthCode : '';
+
+    labelEl.innerHTML = `Delivering to <strong>${d.trainName || 'Train'}</strong>`;
+    headerEl.innerHTML = `<span class="city-orange">${d.trainNumber || ''}</span> · <span style="font-size:0.78rem;font-weight:600;color:white;">Coach ${coach}, Seat ${seat} ${berth ? `(${berth})` : ''}</span>`;
+    
+    // Train strip also visible
+    document.getElementById('strip-train-name').textContent = `${d.trainName} #${d.trainNumber}`;
+    document.getElementById('strip-seat').textContent = `Coach ${coach}, Seat ${seat}`;
     strip.classList.remove('hidden');
-  } else { strip.classList.add('hidden'); }
+  } else {
+    labelEl.textContent = 'Delivering in trains arriving in';
+    headerEl.innerHTML = `<span class="city-orange">Delhi</span>&nbsp;▾`;
+    strip.classList.add('hidden');
+  }
 }
 
 function renderProducts(products) {
@@ -357,7 +501,7 @@ function filterProducts(q) {
 
 function scrollToProducts() { document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' }); }
 function focusSearch() { document.getElementById('product-search').focus(); }
-function showNotif() { showToast('No new notifications', 'info'); }
+function showNotif() { showToast('Delivering orders to platforms 1-8 currently.', 'info'); }
 
 // ===== COUPONS =====
 function copyCoupon(code, btn) {
@@ -383,11 +527,11 @@ function applyPromoCode() {
   if (!code) { showToast('Please enter a coupon code', 'warning'); return; }
   if (code === 'RAILQUICK15') {
     appState.appliedCoupon = code;
-    status.textContent = 'Coupon applied: 15% OFF (Max ₹50)'; status.style.color = 'var(--success)'; status.style.display = 'block';
-    showToast('Coupon applied successfully!'); updateCartSummary();
+    status.textContent = 'Coupon applied: 15% OFF (Max ₹50)'; status.style.color = 'var(--green)'; status.style.display = 'block';
+    showToast('Coupon applied!'); updateCartSummary();
   } else if (code === 'FREEDEL') {
     appState.appliedCoupon = code;
-    status.textContent = 'Free Delivery activated!'; status.style.color = 'var(--success)'; status.style.display = 'block';
+    status.textContent = 'Free Delivery activated!'; status.style.color = 'var(--green)'; status.style.display = 'block';
     showToast('Coupon applied!'); updateCartSummary();
   } else {
     showToast('Invalid coupon code', 'error');
@@ -442,8 +586,10 @@ function initCartPage() {
   }
   if (appState.pnrData) {
     const d = appState.pnrData;
-    const seat = d.passengerList && d.passengerList[0] ? d.passengerList[0].currentStatus : d.reservationClass;
-    document.getElementById('delivery-detail').textContent = `${d.trainName || 'Train'} · Seat: ${seat || '—'} · New Delhi (NDLS)`;
+    const pax = d.passengerList && d.passengerList[0];
+    const coach = pax ? pax.coach : '—';
+    const seat = pax ? pax.berth : '—';
+    document.getElementById('delivery-detail').textContent = `${d.trainName || 'Train'} · Coach ${coach}, Seat ${seat} · New Delhi (NDLS)`;
   }
 }
 
@@ -522,7 +668,8 @@ function initCheckoutPage() {
   if (appState.pnrData) {
     pnrCard.classList.remove('hidden'); manualCard.classList.add('hidden');
     const d = appState.pnrData;
-    const seat = d.passengerList && d.passengerList[0] ? d.passengerList[0].currentStatus : d.reservationClass || '—';
+    const pax = d.passengerList && d.passengerList[0];
+    const seat = pax ? `${pax.coach}, Seat ${pax.berth}` : d.reservationClass || '—';
     document.getElementById('checkout-train').textContent = `${d.trainName} (#${d.trainNumber})`;
     document.getElementById('checkout-seat').textContent = seat;
   } else { pnrCard.classList.add('hidden'); manualCard.classList.remove('hidden'); }
@@ -590,8 +737,9 @@ function placeOrder() {
     const orderId = 'RQ-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     let seat = 'Your Seat', train = 'Train';
     if (appState.pnrData) {
-      seat = appState.pnrData.passengerList?.[0]?.currentStatus || appState.pnrData.reservationClass || '—';
-      train = appState.pnrData.trainName || 'Train';
+      const pax = appState.pnrData.passengerList?.[0];
+      seat = pax ? `Coach ${pax.coach}, Seat ${pax.berth}` : appState.pnrData.reservationClass || '—';
+      train = `${appState.pnrData.trainName} (#${appState.pnrData.trainNumber})`;
     } else {
       const mt = document.getElementById('manual-train')?.value?.trim();
       const mc = document.getElementById('manual-coach')?.value?.trim()?.toUpperCase();
@@ -600,7 +748,18 @@ function placeOrder() {
       if (mc && ms) seat = `Coach ${mc}, Seat ${ms}`;
     }
     const { subtotal, discount, gst, total } = getCartTotals();
-    appState.orders.unshift({ id: orderId, items: [...appState.cart], date: new Date().toLocaleDateString('en-IN'), status: 'preparing', subtotal, discount, gst, total, seat, train });
+    appState.orders.unshift({
+      id: orderId,
+      items: [...appState.cart],
+      date: new Date().toLocaleDateString('en-IN'),
+      status: 'preparing',
+      subtotal,
+      discount,
+      gst,
+      total,
+      seat,
+      train
+    });
     appState.appliedCoupon = null; appState.cart = []; saveState(); updateCartFAB();
     document.getElementById('order-id-display').textContent = orderId;
     document.getElementById('success-seat').textContent = seat;
@@ -609,30 +768,74 @@ function placeOrder() {
   }, 2500);
 }
 
-// ===== ORDERS =====
+// ===== REDESIGNED ORDERS PAGE (BLINKIT STYLE) =====
 function initOrdersPage() {
   const list = document.getElementById('orders-list');
   const empty = document.getElementById('orders-empty');
   if (!appState.orders.length) { list.innerHTML = ''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
+  
   list.innerHTML = appState.orders.map(order => {
-    const statusLabel = { preparing: 'Preparing', 'in-transit': 'In Transit', delivered: 'Delivered' };
-    const itemImgs = order.items.slice(0, 4).map(i => `<img class="order-item-thumb" src="${i.img}" alt="${i.name}" onerror="this.src='product_water.png'" />`).join('');
+    const itemsHTML = order.items.map(i => `
+      <div class="order-item-row">
+        <div class="order-item-left">
+          <span class="order-item-qty-tag">${i.qty}x</span>
+          <span class="order-item-name-text">${i.name}</span>
+        </div>
+        <span class="order-item-price-text">₹${i.price * i.qty}</span>
+      </div>
+    `).join('');
+
+    let trackingStatus = 'Order Placed';
+    if (order.status === 'preparing') { trackingStatus = 'Preparing essentials...'; }
+    else if (order.status === 'in-transit') { trackingStatus = 'Out for delivery at platform!'; }
+    else if (order.status === 'delivered') { trackingStatus = 'Delivered to seat!'; }
+
+    // Simulating Ramesh the delivery partner
+    const partnerName = "Ramesh Kumar";
+    const partnerDesc = "Delivering at Platform 4";
+
     return `
-      <div class="order-card">
-        <div class="order-card-header"><span class="order-id">${order.id}</span><span class="order-date">${order.date}</span></div>
-        <div class="order-status ${order.status || 'preparing'}">${statusLabel[order.status] || 'Preparing'}</div>
-        <div class="order-items-preview">${itemImgs}</div>
-        <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">${order.train || 'Train'} · Seat: ${order.seat || '—'}</div>
+      <div class="blinkit-order-card">
+        <div class="order-shop-header">
+          <div class="shop-title-info">
+            <div class="shop-logo-avatar">RQ</div>
+            <div>
+              <div class="shop-name-text">RailQuick Express Store</div>
+              <div class="order-meta-date">${order.date} · ID: ${order.id}</div>
+            </div>
+          </div>
+          <span class="order-status ${order.status || 'preparing'}">${trackingStatus}</span>
+        </div>
+
+        <div class="order-tracking-mini">
+          <span class="tracking-status-text">🚂 ${order.train}</span>
+          <span class="tracking-eta-text">${order.seat}</span>
+        </div>
+
+        <div class="order-items-summary">
+          ${itemsHTML}
+        </div>
+
+        <div class="order-delivery-partner-card">
+          <div class="partner-avatar">👦</div>
+          <div class="partner-info-text">
+            <div class="partner-name">${partnerName}</div>
+            <div class="partner-desc">${partnerDesc}</div>
+          </div>
+          <button class="partner-call-btn" onclick="showToast('Calling Ramesh (+91 98765 43210)...', 'info')">Call</button>
+        </div>
+
         <div class="order-footer">
-          <div><div class="order-total-label">Total Paid</div><div class="order-total-val">₹${order.total}</div></div>
-          <button class="order-track-btn" onclick="trackOrder('${order.id}')">Track Order</button>
+          <div>
+            <div class="order-total-label">Total Amount Paid</div>
+            <div class="order-total-val">₹${order.total}</div>
+          </div>
+          <button class="btn-green" style="padding:8px 16px; font-size:0.8rem; box-shadow:none; background:var(--green);" onclick="showToast('Order details verified and processed.', 'success')">Details</button>
         </div>
       </div>`;
   }).join('');
 }
-
-function trackOrder(id) { showToast(`Order ${id} is on the way! 🚂`, 'info'); }
 
 // ===== ACCOUNT =====
 function initAccountPage() {
@@ -675,7 +878,7 @@ function openProductModal(productId) {
   document.getElementById('modal-stars').textContent = getStars(p.rating);
   document.getElementById('modal-reviews').textContent = `(${p.reviews} reviews)`;
   document.getElementById('modal-price').innerHTML = p.mrp > p.price
-    ? `₹${p.price} <span style="text-decoration:line-through;color:#9CA3AF;font-size:1rem;">₹${p.mrp}</span> <span style="color:var(--success);font-size:0.85rem;font-weight:600;">${Math.round((1 - p.price / p.mrp) * 100)}% off</span>`
+    ? `₹${p.price} <span style="text-decoration:line-through;color:#9CA3AF;font-size:1rem;">₹${p.mrp}</span> <span style="color:var(--green);font-size:0.85rem;font-weight:600;">${Math.round((1 - p.price / p.mrp) * 100)}% off</span>`
     : `₹${p.price}`;
   document.getElementById('modal-desc').textContent = p.description;
   document.getElementById('modal-tags').innerHTML = p.tags.map(t => `<span class="modal-tag">${t}</span>`).join('');
@@ -718,7 +921,7 @@ function showToast(msg, type = 'success') {
   const text = document.getElementById('toast-msg');
   const icons = { success: '✓', warning: '!', info: 'i', error: '✕' };
   icon.textContent = icons[type] || '✓';
-  icon.style.background = type === 'warning' ? '#F59E0B' : type === 'error' ? '#EF4444' : type === 'info' ? '#3B82F6' : 'var(--success)';
+  icon.style.background = type === 'warning' ? '#F59E0B' : type === 'error' ? '#EF4444' : type === 'info' ? '#3B82F6' : 'var(--green)';
   text.textContent = msg;
   toast.classList.remove('hidden');
   toastTimeout = setTimeout(() => { toast.classList.add('hidden'); }, 3000);
@@ -734,16 +937,30 @@ function hideLoading() { document.getElementById('loading-overlay').classList.ad
 // ===== DATE PICKER =====
 function setDefaultDates() { document.querySelectorAll('input[type="date"]').forEach(input => { input.value = new Date().toISOString().slice(0, 10); }); }
 
+// Render custom date picker with past dates (shows 3 past days, today, and 3 future days)
 function renderCustomDatePicker(containerId, inputId) {
   const container = document.getElementById(containerId);
   const hiddenInput = document.getElementById(inputId);
   if (!container || !hiddenInput) return;
   const today = new Date();
-  const dates = Array.from({ length: 7 }, (_, i) => { const d = new Date(today); d.setDate(today.getDate() + i); return d; });
+  
+  // Custom: Generate range containing 3 past days + today + 3 future days
+  const dates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() - 3 + i); // from 3 days ago to 3 days ahead
+    return d;
+  });
+  
   const currentVal = hiddenInput.value || today.toISOString().slice(0, 10);
-  container.innerHTML = dates.map((date, i) => {
+  container.innerHTML = dates.map((date) => {
     const dateStr = date.toISOString().slice(0, 10);
-    const dayName = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : date.toLocaleDateString('en-IN', { weekday: 'short' });
+    const timeDiff = Math.floor((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    
+    let dayName = date.toLocaleDateString('en-IN', { weekday: 'short' });
+    if (timeDiff === 0 && date.getDate() === today.getDate()) dayName = 'Today';
+    else if (timeDiff === 1 && date.getDate() === today.getDate() + 1) dayName = 'Tom';
+    else if (timeDiff === -1 && date.getDate() === today.getDate() - 1) dayName = 'Yest';
+    
     return `<div class="date-item ${dateStr === currentVal ? 'selected' : ''}" onclick="selectCustomDate('${containerId}','${inputId}','${dateStr}',this)">
       <span class="date-day">${dayName}</span><span class="date-num">${date.getDate()}</span><span class="date-day" style="font-size:0.62rem;margin-top:2px;">${date.toLocaleDateString('en-IN', { month: 'short' })}</span>
     </div>`;

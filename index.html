@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>RailQuick — Essentials Delivered to Your Train Seat</title>
-  <meta name="description" content="RailQuick delivers essential products to your seat in train. Snacks, beverages, hygiene, electronics — delivered at the next station in Delhi." />
-  <meta name="theme-color" content="#0F172A" />
+  <title>RailQuick — Blinkit Style Train Essentials Delivery</title>
+  <meta name="description" content="RailQuick delivers snacks, beverages, hygiene and comfort essentials to your seat in train. Express delivery at Delhi Station." />
+  <meta name="theme-color" content="#0C831F" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -20,9 +20,6 @@
     <div class="splash-overlay"></div>
     <div class="splash-content">
       <div class="splash-logo-wrapper">
-        <div class="splash-train-icon">
-          <svg width="52" height="52" viewBox="0 0 64 64" fill="none"><path d="M20 8h24a8 8 0 018 8v28a8 8 0 01-8 8H20a8 8 0 01-8-8V16a8 8 0 018-8z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="2"/><rect x="18" y="20" width="28" height="14" rx="3" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1.5"/><circle cx="24" cy="46" r="3" fill="white"/><circle cx="40" cy="46" r="3" fill="white"/><line x1="20" y1="52" x2="16" y2="58" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="44" y1="52" x2="48" y2="58" stroke="white" stroke-width="2" stroke-linecap="round"/><rect x="28" y="12" width="8" height="4" rx="2" fill="#FF6B2C"/></svg>
-        </div>
         <h1 class="splash-brand">
           <span class="brand-rail">Rail</span><span class="brand-quick">Quick</span>
         </h1>
@@ -79,7 +76,7 @@
             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
           </span>
         </div>
-        <button class="btn-primary full-width" onclick="checkPNRStatus()">Check Status</button>
+        <button class="btn-green full-width" onclick="checkPNRStatus()">Check Status</button>
 
         <div class="or-divider"><span>OR</span></div>
 
@@ -98,13 +95,35 @@
         <div class="input-label">Journey Date</div>
         <div id="search-date-selector" class="custom-date-selector"></div>
         <input type="date" id="train-date-input" style="display: none;" />
-        <button class="btn-orange full-width" onclick="searchTrain()">Search Train</button>
+        <button class="btn-green full-width" onclick="searchTrain()">Search Train Route</button>
 
         <div style="text-align: center; margin-top: 18px;">
           <a href="#" class="pnr-skip-link" onclick="navigateTo('page-shop')">
             Skip & Browse Essentials
             <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.5;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
+        </div>
+
+        <!-- Extra UI/UX design travel services cards -->
+        <div class="section-header-small" style="margin-top: 28px;">
+          <span class="section-icon">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </span>
+          Station Services
+        </div>
+        <div class="pnr-services-grid">
+          <div class="pnr-service-card" onclick="showToast('Platform Finder: Search train to find platform', 'info')">
+            <span class="pnr-service-icon">🚉</span>
+            <span class="pnr-service-title">Platform Finder</span>
+          </div>
+          <div class="pnr-service-card" onclick="showToast('Coach layout mapper loaded', 'info')">
+            <span class="pnr-service-icon">📐</span>
+            <span class="pnr-service-title">Seat Layout</span>
+          </div>
+          <div class="pnr-service-card" onclick="showToast('Automated Refund Calculator ready', 'info')">
+            <span class="pnr-service-icon">💰</span>
+            <span class="pnr-service-title">Refund Calc</span>
+          </div>
         </div>
       </div>
 
@@ -119,17 +138,17 @@
         <div class="input-label">Journey Date</div>
         <div id="live-date-selector" class="custom-date-selector"></div>
         <input type="date" id="live-date-input" style="display: none;" />
-        <button class="btn-primary full-width" onclick="checkLiveStatus()">Get Live Status</button>
+        <button class="btn-green full-width" onclick="checkLiveStatus()">Get Live Status</button>
       </div>
 
-      <!-- Results -->
+      <!-- Results Container -->
       <div id="pnr-results" class="pnr-results hidden"></div>
 
       <!-- Promo Banner -->
       <div class="promo-banner">
         <div class="promo-banner-text">
-          <div class="promo-banner-title">We deliver essentials at the next station</div>
-          <div class="promo-banner-sub">Quick · Safe · On time</div>
+          <div class="promo-banner-title">Essentials delivered right to your coach</div>
+          <div class="promo-banner-sub">Hassle free · Fresh & Sealed · Guaranteed</div>
         </div>
         <div class="promo-banner-emoji">🎒</div>
       </div>
@@ -138,7 +157,7 @@
     <!-- Continue to Shop Bar -->
     <div class="continue-shop-bar hidden" id="continue-bar">
       <div class="train-info-mini" id="train-info-mini"></div>
-      <button class="btn-orange" onclick="proceedToShop()" style="padding:12px 20px;font-size:0.85rem;">Order Essentials →</button>
+      <button class="btn-green" onclick="proceedToShop()" style="padding:12px 20px;font-size:0.85rem;">Order Essentials →</button>
     </div>
   </div>
 
@@ -146,13 +165,28 @@
   <div id="page-shop" class="page tab-page">
     <div class="shop-topbar">
       <div>
-        <div class="delivering-label">Delivering in trains arriving in</div>
-        <div class="city-select"><span class="city-orange">Delhi</span>&nbsp;▾</div>
+        <div class="delivering-label" id="shop-delivering-label">Delivering in trains arriving in</div>
+        <div class="city-select" id="shop-delivery-header"><span class="city-orange">Delhi</span>&nbsp;▾</div>
       </div>
       <button class="notif-btn" onclick="showNotif()">
         <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notif-badge" id="notif-count">2</span>
       </button>
+    </div>
+
+    <!-- Search Bar with Blinkit style Green Outer Wrapper -->
+    <div class="search-outer-container">
+      <div class="search-container">
+        <div class="search-bar" onclick="focusSearch()">
+          <span class="search-icon">
+            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input type="text" id="product-search" class="search-input" placeholder="Search snacks, water, powerbank..." oninput="filterProducts(this.value)" />
+        </div>
+        <button class="search-btn" onclick="filterProducts(document.getElementById('product-search').value)">
+          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
     </div>
 
     <!-- Train Info Strip -->
@@ -167,47 +201,48 @@
       <button class="strip-change" onclick="navigateTo('page-pnr')">Change</button>
     </div>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-      <div class="search-bar" onclick="focusSearch()">
-        <span class="search-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </span>
-        <input type="text" id="product-search" class="search-input" placeholder="What do you need during your journey?" oninput="filterProducts(this.value)" />
-      </div>
-      <button class="search-btn" onclick="filterProducts(document.getElementById('product-search').value)">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="color:white;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-    </div>
-
     <!-- Categories -->
     <div class="categories-scroll">
       <div class="category-pill active" onclick="filterCategory('all', this)">
-        <div class="cat-icon">🛒</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
         <div class="cat-label">All</div>
       </div>
       <div class="category-pill" onclick="filterCategory('snacks', this)">
-        <div class="cat-icon">🍿</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
         <div class="cat-label">Snacks</div>
       </div>
       <div class="category-pill" onclick="filterCategory('beverages', this)">
-        <div class="cat-icon">🥤</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 2H6v4h12V2zM6 10h12v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10z"/><line x1="12" y1="6" x2="12" y2="10"/></svg>
+        </div>
         <div class="cat-label">Beverages</div>
       </div>
       <div class="category-pill" onclick="filterCategory('hygiene', this)">
-        <div class="cat-icon">🧴</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"/></svg>
+        </div>
         <div class="cat-label">Hygiene</div>
       </div>
       <div class="category-pill" onclick="filterCategory('electronics', this)">
-        <div class="cat-icon">📱</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+        </div>
         <div class="cat-label">Electronics</div>
       </div>
       <div class="category-pill" onclick="filterCategory('comfort', this)">
-        <div class="cat-icon">😴</div>
-        <div class="cat-label">Travel Comfort</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 13h18M9 9v4M15 9v4"/></svg>
+        </div>
+        <div class="cat-label">Comfort</div>
       </div>
       <div class="category-pill" onclick="filterCategory('all', this)">
-        <div class="cat-icon">⋯</div>
+        <div class="cat-icon">
+          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        </div>
         <div class="cat-label">More</div>
       </div>
     </div>
@@ -265,7 +300,7 @@
 
     <div class="delivery-card" id="delivery-card">
       <span class="delivery-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="color:var(--orange);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="color:var(--green);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       </span>
       <div class="delivery-info">
         <div class="delivery-title">Delivering to your seat</div>
@@ -282,18 +317,18 @@
       </div>
       <div class="empty-title">Your cart is empty</div>
       <div class="empty-sub">Add essentials for your journey!</div>
-      <button class="btn-orange" onclick="navigateTo('page-shop')">Browse Products</button>
+      <button class="btn-green" onclick="navigateTo('page-shop')">Browse Products</button>
     </div>
 
     <!-- Promo Code -->
     <div class="promo-section">
       <div style="font-size:0.85rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:6px;margin-bottom:10px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--orange);"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--green);"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
         Apply Promo Code
       </div>
       <div style="display:flex;gap:8px;">
         <input type="text" id="promo-input" class="rq-input" placeholder="Enter coupon code" style="margin-bottom:0;padding:10px 14px;text-transform:uppercase;" />
-        <button onclick="applyPromoCode()" class="btn-orange" style="padding:0 16px;white-space:nowrap;font-size:0.85rem;border-radius:var(--radius-sm);height:44px;">Apply</button>
+        <button onclick="applyPromoCode()" class="btn-green" style="padding:0 16px;white-space:nowrap;font-size:0.85rem;border-radius:var(--radius-sm);height:44px;box-shadow:none;">Apply</button>
       </div>
       <div id="promo-status" style="font-size:0.78rem;font-weight:600;display:none;margin-top:6px;"></div>
     </div>
@@ -307,7 +342,7 @@
       <div class="summary-row summary-total"><span>Total</span><span id="summary-total">₹0</span></div>
     </div>
 
-    <button class="btn-orange full-width checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+    <button class="btn-green full-width checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
   </div>
 
   <!-- ==================== CHECKOUT PAGE ==================== -->
@@ -329,14 +364,14 @@
     <!-- Step 1: Details -->
     <div class="checkout-section" id="checkout-step-1">
       <h3 class="checkout-section-title">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
         Delivery Details
       </h3>
       <div class="checkout-detail-card" id="checkout-pnr-details">
         <div class="detail-row"><span class="detail-label">Train</span><span class="detail-value" id="checkout-train">—</span></div>
         <div class="detail-row"><span class="detail-label">Coach / Seat</span><span class="detail-value" id="checkout-seat">—</span></div>
         <div class="detail-row"><span class="detail-label">Station</span><span class="detail-value">New Delhi (NDLS)</span></div>
-        <div class="detail-row"><span class="detail-label">ETA</span><span class="detail-value" id="checkout-eta" style="color:var(--success);font-weight:700;">~15 mins</span></div>
+        <div class="detail-row"><span class="detail-label">ETA</span><span class="detail-value" id="checkout-eta" style="color:var(--green);font-weight:700;">~15 mins</span></div>
       </div>
 
       <div id="checkout-manual-details" class="hidden" style="display:flex;flex-direction:column;gap:12px;background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);margin-bottom:20px;">
@@ -349,14 +384,14 @@
       </div>
 
       <h3 class="checkout-section-title" style="margin-top:20px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Contact Details
       </h3>
       <div class="input-group"><input type="text" class="rq-input" id="contact-name" placeholder="Full Name" /></div>
       <div class="input-group"><input type="tel" class="rq-input" id="contact-phone" placeholder="Phone Number" /></div>
 
       <h3 class="checkout-section-title" style="margin-top:20px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         Order Summary
       </h3>
       <div id="checkout-items-mini" class="checkout-items-mini"></div>
@@ -364,13 +399,13 @@
         <span>Total Amount</span>
         <span id="checkout-total-amt" style="font-weight:800;color:var(--navy);font-size:1.2rem;">₹0</span>
       </div>
-      <button class="btn-orange full-width" style="margin-top:20px;" onclick="goToPayment()">Continue to Payment →</button>
+      <button class="btn-green full-width" style="margin-top:20px;" onclick="goToPayment()">Continue to Payment →</button>
     </div>
 
     <!-- Step 2: Payment -->
     <div class="checkout-section hidden" id="checkout-step-2">
       <h3 class="checkout-section-title">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         Choose Payment Method
       </h3>
       <div class="payment-options">
@@ -386,14 +421,14 @@
         </div>
         <div class="payment-option" onclick="selectPayment(this, 'cod')" id="pay-cod">
           <div class="pay-icon">💵</div>
-          <div class="pay-info"><div class="pay-title">Cash on Delivery</div><div class="pay-sub">Pay when delivered</div></div>
+          <div class="pay-info"><div class="pay-title">Cash on Delivery</div><div class="pay-sub">Pay cash/UPI at seat</div></div>
           <div class="pay-radio"></div>
         </div>
       </div>
 
       <div id="upi-input-section" class="payment-detail-section" style="display:block;">
         <div class="input-group">
-          <input type="text" class="rq-input" placeholder="Enter UPI ID (e.g. name@paytm)" id="upi-id-input" />
+          <input type="text" class="rq-input" placeholder="Enter UPI ID (e.g. name@okaxis)" id="upi-id-input" />
           <span class="input-icon">@</span>
         </div>
         <div class="upi-apps">
@@ -405,15 +440,15 @@
 
       <div class="order-total-pay">
         <span>To Pay</span>
-        <span id="pay-total-amt" style="color:var(--orange);font-weight:800;font-size:1.3rem;">₹0</span>
+        <span id="pay-total-amt" style="color:var(--green);font-weight:800;font-size:1.3rem;">₹0</span>
       </div>
 
-      <button class="btn-orange full-width" style="margin-top:20px;" onclick="placeOrder()">
+      <button class="btn-green full-width" style="margin-top:20px;" onclick="placeOrder()">
         <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:white;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Place Order
       </button>
       <p class="secure-note">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:14px;height:14px;color:var(--success);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:14px;height:14px;color:var(--green);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Your order is safe & secure
       </p>
     </div>
@@ -423,14 +458,14 @@
       <div class="order-success">
         <div class="success-animation"><div class="success-circle"><span class="success-check">✓</span></div></div>
         <h2 class="success-title">Order Placed! 🎉</h2>
-        <p class="success-sub">Your essentials are being prepared and will be delivered to your seat.</p>
+        <p class="success-sub">Your essentials are being prepared and will be delivered directly to your coach & seat.</p>
         <div class="order-id-badge">Order ID: <strong id="order-id-display">RQ-XXXXXX</strong></div>
         <div class="delivery-estimate-card">
           <div class="est-row"><span>Delivering to</span><strong id="success-seat">Your Seat</strong></div>
-          <div class="est-row"><span>Estimated time</span><strong style="color:var(--success);">15 – 20 mins</strong></div>
+          <div class="est-row"><span>Estimated time</span><strong style="color:var(--green);">15 – 20 mins</strong></div>
           <div class="est-row"><span>Station</span><strong>New Delhi (NDLS)</strong></div>
         </div>
-        <button class="btn-orange full-width" onclick="navigateTo('page-orders')">Track Order</button>
+        <button class="btn-green full-width" onclick="navigateTo('page-orders')">Track Order</button>
         <button class="btn-ghost full-width" style="margin-top:10px;" onclick="navigateTo('page-shop')">Continue Shopping</button>
       </div>
     </div>
@@ -449,41 +484,8 @@
         <svg class="icon-svg" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--text-light);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
       </div>
       <div class="empty-title">No orders yet</div>
-      <div class="empty-sub">Start shopping to see your orders here!</div>
-      <button class="btn-orange" onclick="navigateTo('page-shop')">Shop Now</button>
-    </div>
-  </div>
-
-  <!-- ==================== OFFERS PAGE ==================== -->
-  <div id="page-offers" class="page tab-page">
-    <div class="page-header">
-      <button class="back-btn-dark" onclick="navigateTo('page-shop')">←</button>
-      <h2 class="page-title">Offers & Coupons</h2>
-      <div></div>
-    </div>
-    <div class="offers-container">
-      <div style="background:white;border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--card-shadow);border-left:4px solid var(--orange);display:flex;flex-direction:column;gap:8px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-weight:800;font-size:1.1rem;color:var(--text);">15% OFF SAVINGS</span>
-          <span style="background:var(--orange-light);color:var(--orange);padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:800;">ACTIVE</span>
-        </div>
-        <div style="font-size:0.85rem;color:var(--text-light);line-height:1.45;">Save on snacks and beverages for your journey. Max discount ₹50.</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px dashed var(--border);padding:10px 14px;border-radius:var(--radius-sm);margin-top:6px;">
-          <code style="font-weight:700;color:var(--navy);font-size:0.95rem;letter-spacing:1px;">RAILQUICK15</code>
-          <button onclick="copyCoupon('RAILQUICK15', this)" style="background:none;border:none;color:var(--orange);font-size:0.82rem;font-weight:700;cursor:pointer;">Copy</button>
-        </div>
-      </div>
-      <div style="background:white;border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--card-shadow);border-left:4px solid var(--orange);display:flex;flex-direction:column;gap:8px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-weight:800;font-size:1.1rem;color:var(--text);">Free Delivery</span>
-          <span style="background:var(--orange-light);color:var(--orange);padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:800;">ACTIVE</span>
-        </div>
-        <div style="font-size:0.85rem;color:var(--text-light);line-height:1.45;">Get free delivery on orders above ₹199 at Delhi Railway Station.</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px dashed var(--border);padding:10px 14px;border-radius:var(--radius-sm);margin-top:6px;">
-          <code style="font-weight:700;color:var(--navy);font-size:0.95rem;letter-spacing:1px;">FREEDEL</code>
-          <button onclick="copyCoupon('FREEDEL', this)" style="background:none;border:none;color:var(--orange);font-size:0.82rem;font-weight:700;cursor:pointer;">Copy</button>
-        </div>
-      </div>
+      <div class="empty-sub">Add some snacks and comfort items to see them here!</div>
+      <button class="btn-green" onclick="navigateTo('page-shop')">Shop Now</button>
     </div>
   </div>
 
@@ -501,7 +503,7 @@
           <svg class="icon-svg" viewBox="0 0 24 24" style="width:40px;height:40px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <h2 class="account-login-title">Sign in to RailQuick</h2>
-        <p class="account-login-sub">Save orders, get personalized deals & track deliveries seamlessly.</p>
+        <p class="account-login-sub">Save train details, track orders, and experience lightning-fast delivery.</p>
         <button class="btn-google" onclick="googleSignIn()">
           <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Continue with Google
@@ -531,10 +533,6 @@
           <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></span>
           <span class="menu-text">PNR & Train Status</span><span class="menu-arrow">›</span>
         </div>
-        <div class="menu-item" onclick="navigateTo('page-offers')">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
-          <span class="menu-text">My Offers & Coupons</span><span class="menu-arrow">›</span>
-        </div>
         <div class="menu-item">
           <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
           <span class="menu-text">Payment Methods</span><span class="menu-arrow">›</span>
@@ -542,10 +540,6 @@
         <div class="menu-item">
           <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
           <span class="menu-text">Notifications</span><span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          <span class="menu-text">Rate the App</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item">
           <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/></svg></span>
@@ -582,7 +576,7 @@
           </div>
           <span class="modal-total" id="modal-total">₹0</span>
         </div>
-        <button class="btn-orange full-width" onclick="addToCartFromModal()">Add to Cart</button>
+        <button class="btn-green full-width" onclick="addToCartFromModal()">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -619,10 +613,6 @@
     <button class="nav-btn" id="nav-orders" onclick="activateNav('orders'); navigateTo('page-orders')">
       <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
       <span class="nav-label">Orders</span>
-    </button>
-    <button class="nav-btn" id="nav-offers" onclick="activateNav('offers'); navigateTo('page-offers')">
-      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
-      <span class="nav-label">Offers</span>
     </button>
     <button class="nav-btn" id="nav-account" onclick="activateNav('account'); navigateTo('page-account')">
       <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
